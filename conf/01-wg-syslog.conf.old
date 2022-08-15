@@ -1,0 +1,28 @@
+input {
+  udp {
+    port => 5140
+    type => syslog
+  }
+}
+
+filter {
+  if [type] == "syslog" {
+    grok {
+      break_on_match => false
+      match => ["message", 
+        "\<%{INT:syslog_code}\>%{SYSLOGTIMESTAMP:syslog_timestamp} %{IPORHOST:syslog_host} %{DATA:fw_msg_type}: msg_id=\"%{DATA:msg_id}\" %{NOTSPACE:fw_action} %{NOTSPACE:fw_int_source} %{NOTSPACE:fw_int_target} %{INT:unknown_1} (?<protocol>icmp|tcp|udp) %{INT:unknown_2} %{INT:unknown_3} %{IP:source_ip} %{IP:target_ip} %{INT:source_port} %{INT:target_port} %{GREEDYDATA:message}",
+        "\<%{INT:syslog_code}\>%{SYSLOGTIMESTAMP:syslog_timestamp} %{IPORHOST:syslog_host} %{DATA:fw_msg_type}: msg_id=\"%{DATA:msg_id}\" %{NOTSPACE:fw_action} %{NOTSPACE:fw_int_source} %{NOTSPACE:fw_int_target} (?<protocol>icmp|tcp|udp) %{IP:source_ip} %{IP:target_ip} %{INT:source_port} %{INT:target_port} %{GREEDYDATA:message}",
+        "\<%{INT:syslog_code}\>%{SYSLOGTIMESTAMP:syslog_timestamp} %{IPORHOST:syslog_host} %{DATA:fw_msg_type}: msg_id=\"%{DATA:msg_id}\" %{NOTSPACE:fw_action} %{NOTSPACE:fw_int_source} %{NOTSPACE:fw_int_target} (?<protocol>icmp|tcp|udp) %{IP:source_ip} %{IP:target_ip} %{GREEDYDATA:message}"]
+      add_field => [ "received_at", "%{@timestamp}" ]
+      add_field => [ "received_from", "%{host}" ]
+    }
+    date {
+      match => [ "syslog_timestamp", "MMM d HH:mm:ss", "MMM dd HH:mm:ss" ]
+    }
+  }
+}
+
+output {
+  elasticsearch { hosts => ["localhost:9200"] }
+  stdout { codec => rubydebug }
+}
