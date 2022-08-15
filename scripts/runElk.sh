@@ -3,14 +3,12 @@ echo "This script will setup ELK using Docker"
 imageName="ghcr.io/djjaegle/elk-wg-syslog"
 #Login to remote GitHub container registry
 cat ./.github.token | docker login ghcr.io -u djjaegle --password-stdin
-#Clean up and start latest eptc-api image
-echo "Pulling latest eptc-api image..."
-docker image rm $imageName
+echo "Pulling latest elk-wg-syslog image..."
 docker pull $imageName
-cat ./.github.token | docker login ghcr.io -u djjaegle --password-stdin
-echo "Spinning up docker ELK container...."
+echo "Spinning up ELK docker container...."
 docker run -d --name elk \
     -p 5140:5140/udp -p 5601:5601/tcp \
     -v "elk-data:/var/lib/elasticsearch" \
     --restart=unless-stopped \
     $imageName
+echo "ELK run script complete!"
