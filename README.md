@@ -3,6 +3,7 @@ This project will build an ELK stack and configure it with a syslog server liste
 
 ## Testing Tools
 You can test the syslog connection using NetCat command.
+
 **Interactively log messages:**
 `nc -4u localhost 5140`
 
