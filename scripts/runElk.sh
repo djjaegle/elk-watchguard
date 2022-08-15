@@ -2,7 +2,7 @@
 echo "This script will setup ELK using Docker"
 imageName="ghcr.io/djjaegle/elk-wg-syslog"
 #Login to remote GitHub container registry
-cat ./.github.token | docker login ghcr.io -u djjaegle --password-stdin
+echo $GITHUB_TOKEN | docker login ghcr.io -u djjaegle --password-stdin
 echo "Pulling latest elk-wg-syslog image..."
 docker pull $imageName
 echo "Spinning up ELK docker container...."
