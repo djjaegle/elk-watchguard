@@ -1,5 +1,5 @@
 # elk-watchguard
-This project will build a ELK stack and configure it with a syslog server listening on UDP port 5140. It will also provide a Grok filter config to correctly parse Watchguard Firebox firewall traffic logs.
+This project will build an ELK stack and configure it with a syslog server listening on UDP port 5140. It will also provide a Grok filter config to correctly parse Watchguard Firebox firewall traffic logs.
 
 ## Testing Tools
 You can test the syslog connection using NetCat command.
