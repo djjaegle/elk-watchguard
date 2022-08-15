@@ -8,8 +8,6 @@ echo "Pulling latest eptc-api image..."
 docker image rm $imageName
 docker pull $imageName
 cat ./.github.token | docker login ghcr.io -u djjaegle --password-stdin
-echo "Creating elk-data volume..."
-docker volume create elk-data
 echo "Spinning up docker ELK container...."
 docker run -d --name elk \
     -p 5140:5140/udp -p 5601:5601/tcp \
